@@ -14,6 +14,12 @@
         "tab": "Guides",
         "groups": [
           {
+            "group": "Home",
+            "pages": [
+              "landing"
+            ]
+          },
+          {
             "group": "Get Started",
             "pages": [
               "introduction",
