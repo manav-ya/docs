@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin & Win Wheel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(128, 128, 128, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .dynamic-island {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #000;
+            border-radius: 15px;
+            top: 7px;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            height: 44px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-right {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Payment Details (Background) */
+        .payment-details {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            color: white;
+            opacity: 0.3;
+            font-size: 14px;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Spin & Win Overlay */
+        .spin-win-overlay {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .earned-text {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .spin-win-title {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Wheel Container */
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+
+        /* Pointer */
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #4CAF50;
+            z-index: 10;
+        }
+
+        /* Wheel */
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            border: 8px solid white;
+            border-right: 8px solid #f7931e;
+            transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: rotate(0deg);
+        }
+
+        .wheel.spinning {
+            animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(var(--spin-degrees)); }
+        }
+
+        /* Wheel Segments */
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .segment.yellow {
+            background: #FFD700;
+            transform: rotate(0deg);
+        }
+
+        .segment.pink {
+            background: #FF69B4;
+            transform: rotate(90deg);
+        }
+
+        .segment.blue {
+            background: #4169E1;
+            transform: rotate(180deg);
+            color: white;
+        }
+
+        .segment.green {
+            background: #32CD32;
+            transform: rotate(270deg);
+        }
+
+        .segment-content {
+            transform: rotate(calc(-1 * var(--segment-rotation)));
+            max-width: 80%;
+        }
+
+        .segment-logo {
+            width: 30px;
+            height: 30px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Spin Button */
+        .spin-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .spin-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .spin-button:active {
+            transform: translateY(0);
+        }
+
+        .spin-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .wheel-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .wheel {
+                width: 250px;
+                height: 250px;
+            }
+
+            .spin-win-title {
+                font-size: 28px;
+            }
+
+            .segment {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span>9:41</span>
+        <div class="dynamic-island"></div>
+        <div>📶 📶</div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-left">
+            <span>‹</span>
+            <span>Payments Detail</span>
+        </div>
+        <div class="nav-right">✕</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Payment Details (Background) -->
+        <div class="payment-details">
+            <div class="payment-item">
+                <span>🎓</span>
+                <span>School Fee</span>
+            </div>
+            <div class="payment-item">
+                <span>₹1</span>
+                <span>0076</span>
+            </div>
+            <div class="payment-item">
+                <span>✓</span>
+                <span>Settlement in progress</span>
+            </div>
+            <div class="payment-item">
+                <span>🕐</span>
+                <span>Payment</span>
+            </div>
+            <div class="payment-item">
+                <span>🏠</span>
+                <span>Rent</span>
+            </div>
+        </div>
+
+        <!-- Spin & Win Overlay -->
+        <div class="spin-win-overlay">
+            <div class="earned-text">You've earned a voucher!</div>
+            <div class="spin-win-title">Spin & Win</div>
+        </div>
+
+        <!-- Wheel Container -->
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+                <!-- Yellow Segment -->
+                <div class="segment yellow" style="--segment-rotation: 0deg;">
+                    <div class="segment-content">
+                        <div>₹99 Burger Meal</div>
+                        <div class="segment-logo" style="color: #d32f2f;">M</div>
+                    </div>
+                </div>
+
+                <!-- Pink Segment -->
+                <div class="segment pink" style="--segment-rotation: 90deg;">
+                    <div class="segment-content">
+                        <div>₹400 Off on minimum purchase of ₹1999</div>
+                        <div class="segment-logo" style="color: #e91e63; background: white; border-radius: 50%; width: 25px; height: 25px;">M</div>
+                    </div>
+                </div>
+
+                <!-- Blue Segment -->
+                <div class="segment blue" style="--segment-rotation: 180deg;">
+                    <div class="segment-content">
+                        <div>Free 1 Year GOLD MAX MEMBERSHIP</div>
+                        <div class="segment-logo" style="color: white;">∞</div>
+                    </div>
+                </div>
+
+                <!-- Green Segment -->
+                <div class="segment green" style="--segment-rotation: 270deg;">
+                    <div class="segment-content">
+                        <div>Buy 3 Boxers at ₹799</div>
+                        <div class="segment-logo" style="color: #000;">$</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spin Button -->
+        <button class="spin-button" id="spinButton">Spin</button>
+    </div>
+
+    <script>
+        class SpinWheel {
+            constructor() {
+                this.wheel = document.getElementById('wheel');
+                this.spinButton = document.getElementById('spinButton');
+                this.isSpinning = false;
+                this.segments = [
+                    { color: 'yellow', prize: '₹99 Burger Meal', logo: 'M', logoColor: '#d32f2f' },
+                    { color: 'pink', prize: '₹400 Off on minimum purchase of ₹1999', logo: 'M', logoColor: '#e91e63' },
+                    { color: 'blue', prize: 'Free 1 Year GOLD MAX MEMBERSHIP', logo: '∞', logoColor: 'white' },
+                    { color: 'green', prize: 'Buy 3 Boxers at ₹799', logo: '$', logoColor: '#000' }
+                ];
+                
+                this.init();
+            }
+
+            init() {
+                this.spinButton.addEventListener('click', () => this.spin());
+            }
+
+            spin() {
+                if (this.isSpinning) return;
+
+                this.isSpinning = true;
+                this.spinButton.disabled = true;
+                this.spinButton.textContent = 'Spinning...';
+
+                // Generate random spin degrees (multiple full rotations + random segment)
+                const fullRotations = 3 + Math.random() * 2; // 3-5 full rotations
+                const segmentAngle = 90; // Each segment is 90 degrees
+                const randomSegment = Math.floor(Math.random() * 4);
+                const finalAngle = randomSegment * segmentAngle;
+                const totalDegrees = (fullRotations * 360) + finalAngle;
+
+                // Set the spin animation
+                this.wheel.style.setProperty('--spin-degrees', `${totalDegrees}deg`);
+                this.wheel.classList.add('spinning');
+
+                // Determine the winning segment
+                const winningSegment = this.segments[randomSegment];
+
+                // Reset after animation completes
+                setTimeout(() => {
+                    this.wheel.classList.remove('spinning');
+                    this.wheel.style.transform = `rotate(${totalDegrees}deg)`;
+                    
+                    // Show result
+                    this.showResult(winningSegment);
+                    
+                    this.isSpinning = false;
+                    this.spinButton.disabled = false;
+                    this.spinButton.textContent = 'Spin';
+                }, 3000);
+            }
+
+            showResult(segment) {
+                // Create a simple alert for the result
+                // In a real app, you might want a more sophisticated modal
+                setTimeout(() => {
+                    alert(`Congratulations! You won: ${segment.prize}`);
+                }, 500);
+            }
+        }
+
+        // Initialize the spin wheel when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SpinWheel();
+        });
+    </script>
+</body>
+</html>
