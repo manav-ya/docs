@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin & Win - Payments Detail</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+                <span class="signal"></span>
+                <span class="wifi"></span>
+            </div>
+        </div>
+        
+        <!-- Dynamic Island -->
+        <div class="dynamic-island"></div>
+        
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <button class="back-btn">&lt;</button>
+            <h1 class="nav-title">Payments Detail</h1>
+            <button class="close-btn">×</button>
+        </div>
+        
+        <!-- Background Content (Partially Visible) -->
+        <div class="background-content">
+            <div class="payment-item">
+                <div class="payment-icon">🎓</div>
+                <div class="payment-details">
+                    <div class="payment-title">School Fee</div>
+                    <div class="payment-amount">₹1 0076</div>
+                </div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="checkmark">✓</div>
+                    <span>Settlement in progress</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Spin & Win Overlay -->
+        <div class="overlay">
+            <div class="overlay-content">
+                <h2 class="overlay-title">You've earned a voucher!</h2>
+                <h1 class="spin-win-title">Spin & Win</h1>
+                
+                <!-- Spin Wheel Container -->
+                <div class="wheel-container">
+                    <div class="wheel" id="spinWheel">
+                        <!-- Wheel segments will be created by CSS -->
+                    </div>
+                    <div class="wheel-pointer"></div>
+                </div>
+                
+                <!-- Spin Button -->
+                <button class="spin-btn" id="spinButton">Spin</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
