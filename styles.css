@@ -1,0 +1,353 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Pattern */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.app-container {
+    position: relative;
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* Status Bar */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+    position: relative;
+}
+
+.status-icons {
+    display: flex;
+    gap: 5px;
+}
+
+.signal, .wifi {
+    width: 20px;
+    height: 12px;
+    background: white;
+    border-radius: 2px;
+}
+
+/* Dynamic Island */
+.dynamic-island {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 30px;
+    background: black;
+    border-radius: 15px;
+    z-index: 1001;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    color: white;
+    position: relative;
+    z-index: 1000;
+}
+
+.back-btn, .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Background Content */
+.background-content {
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    right: 20px;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.payment-icon {
+    font-size: 24px;
+}
+
+.payment-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.payment-amount {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.timeline {
+    margin-top: 20px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+.checkmark {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.overlay-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.spin-win-title {
+    font-size: 32px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FF6B35, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+}
+
+/* Wheel Container */
+.wheel-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 30px;
+}
+
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    border: 8px solid white;
+    border-right: 8px solid #FFD700;
+    transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: rotate(0deg);
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 25px solid #4CAF50;
+    z-index: 10;
+}
+
+/* Wheel Segments */
+.wheel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        #FFD700 0deg 90deg,
+        #FF69B4 90deg 180deg,
+        #1E90FF 180deg 270deg,
+        #32CD32 270deg 360deg
+    );
+    mask: radial-gradient(circle at center, transparent 60%, black 60%);
+    -webkit-mask: radial-gradient(circle at center, transparent 60%, black 60%);
+}
+
+/* Segment Content */
+.wheel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: 
+        linear-gradient(45deg, transparent 40%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.1) 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.1) 60%, transparent 60%);
+}
+
+/* Segment Labels */
+.wheel-container::before {
+    content: '₹99 Burger Meal';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    z-index: 5;
+}
+
+.wheel-container::after {
+    content: 'McDonald\'s';
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #d32f2f;
+    z-index: 5;
+}
+
+/* Additional segment labels using pseudo-elements on wheel */
+.wheel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: 
+        /* Right segment (Pink) */
+        linear-gradient(90deg, transparent 0%, transparent 25%, #FF69B4 25%, #FF69B4 50%, transparent 50%),
+        /* Bottom segment (Blue) */
+        linear-gradient(180deg, transparent 0%, transparent 25%, #1E90FF 25%, #1E90FF 50%, transparent 50%),
+        /* Left segment (Green) */
+        linear-gradient(270deg, transparent 0%, transparent 25%, #32CD32 25%, #32CD32 50%, transparent 50%),
+        /* Top segment (Yellow) */
+        linear-gradient(0deg, transparent 0%, transparent 25%, #FFD700 25%, #FFD700 50%, transparent 50%);
+    mask: radial-gradient(circle at center, transparent 60%, black 60%);
+    -webkit-mask: radial-gradient(circle at center, transparent 60%, black 60%);
+}
+
+/* Spin Button */
+.spin-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.spin-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.spin-btn:active {
+    transform: translateY(0);
+}
+
+.spin-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Spinning Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.wheel.spinning {
+    animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .wheel-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .spin-win-title {
+        font-size: 28px;
+    }
+    
+    .overlay-content {
+        padding: 15px;
+    }
+}
